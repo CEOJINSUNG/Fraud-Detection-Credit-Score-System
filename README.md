@@ -7,3 +7,5 @@ A Purpose of this Repository is to Build Fraud Detection Model for Online Shoppi
 1. 캐글 데이터 : https://www.kaggle.com/mlg-ulb/creditcardfraud
 2. FDS with ML : https://www.researchgate.net/project/Fraud-detection-with-machine-learning
 ```
+
+### FDS란?
