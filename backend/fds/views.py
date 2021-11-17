@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 # rest_framework setting
 from rest_framework import status
@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 # Fraud Detection System
+import boto3
+from backend.settings import MY_AWS_ACCESS_KEY_ID, MY_AWS_SECRET_ACCESS_KEY
 import os
 import pandas as pd
 import numpy as np
@@ -15,6 +17,26 @@ import seaborn as sns
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from sklearn.model_selection import train_test_split, learning_curve
 from sklearn.metrics import average_precision_score
+
+class VisualizaitonInPerson(APIView):
+    def get_object(self, request, pk=None):
+        s3 = boto3.resource(
+            "s3",
+            aws_access_key_id = MY_AWS_ACCESS_KEY_ID,
+            aws_secret_access_key = MY_AWS_SECRET_ACCESS_KEY
+        )
+        bucket = s3.Object("jinsung-fraud-detection", "s3://jinsung-fraud-detection/transaction/dt={}/transaction.parquet".format(request))
+        df = pd.read_parquet("{}".format(bucket))
+        return 0
+
+    def get(self, request, pk=None): 
+        data = self.get_object(request)
+        if data is not None:
+            sns.set_style("whitegrid")
+            sns_plot = sns.countplot(x="COD_GENDER", data=data)
+            image = sns_plot.savefig("output.png")
+            return image
+        raise Http404
 
 # Create your views here.
 # class Visualization(APIView):

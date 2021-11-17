@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from fds.views import Visualization
+from fds.views import VisualizaitonInPerson
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('plot/', Visualization.as_view()),
+    path('plot/<int:pk>/', VisualizaitonInPerson.as_view()),
 ]
